@@ -1,27 +1,43 @@
-'use strict';
+"use strict";
 
-
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const axios = require('axios');
-const port = process.env.Port;
+require("dotenv").config();
+const express = require("express");
 const app = express();
+const cors = require("cors");
+const mongoose = require("mongoose");
+app.use(express.json());
+// const getBooksHandler = require('./modules/user');
+
 app.use(cors());
 
-const userCollection = require('./mymodle/usermodel');
-const getbooksHandler = require('./mymodle/usermodel');
+const PORT = process.env.PORT || 3010;
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const {
+  handleDeleteBook,
+  getBooksHandler,
+  handleAddBook,
+  updateBookHandler,
+} = require('./mymodle/usermodel');
+app.get("/books", getBooksHandler);
 
+//http://localhost:3010/book?email=abed
+// server.get('/book', bookHandler)
+app.post('/addbook', handleAddBook);
+app.delete('/deletebook/:index', handleDeleteBook);
+app.put('/updateBook/:index', updateBookHandler);
 
-
-app.get('/',homeHandler);
-app.get('/books', getbooksHandler);
-
-function homeHandler(req,res){
-    res.send('Home Route');
+//localhost:3010/
+app.get("/", homeHandler);
+function homeHandler(req, res) {
+  res.send("Home Route");
 }
+// http://localhost:3010/books?email=labushanab14@gmail.com
+
+// app.post('/addbook', handleAddBook);
+// app.delete('/deletebook/:index', handleDeleteBooks);
 
 
-    app.listen(port, () => {
-        console.log(`listen on ${port}`);
-    })
+app.listen(PORT || 3010, () => console.log(`listening on ${PORT}`));
