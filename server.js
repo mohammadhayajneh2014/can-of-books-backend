@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 3010;
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect('mongodb://localhost:27017/books', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
